@@ -1,13 +1,13 @@
 # 💧 AquaPay - Water Money Collection System
 
-A modern, fast, mobile-friendly Water Bill Collection and Accounting system designed specifically for **physical door-to-door water money collection** with **Section-wise area organization (Sections A to I)** and a **complete running balance ledger**.
+A modern, fast, mobile-friendly Water Bill Collection and Accounting system designed specifically for **physical door-to-door water money collection** with **Section-wise area organization (Sections A to I)**, built for quick real-world field use.
 
 ---
 
 ## 🚀 How to Run the App
 
 1. Double-click on:
-   👉 **[`run.bat`](file:///C:/Users/ADMIN/.gemini/antigravity/scratch/water-collection-system/run.bat)** *(or open [`index.html`](file:///C:/Users/ADMIN/.gemini/antigravity/scratch/water-collection-system/index.html) in Google Chrome / your browser)*
+   👉 **[`run.bat`](file:///C:/Users/ADMIN/.gemini/antigravity/scratch/water-collection-system/run.bat)** *(or open [`index.html`](file:///C:/Users/ADMIN/.gemini/antigravity/scratch/water-collection-system/index.html))*
 2. If already open in your browser, press **F5** (or **Ctrl + R**) to reload!
 
 ---
@@ -90,7 +90,8 @@ When you open a room's payment window, the system automatically shows:
 
 ## 📱 100% Responsive on Any Device & Browser
 
-The application is fully optimized for **smartphones, tablets, laptops, and desktops** across all modern browsers (**Google Chrome, Microsoft Edge, Mozilla Firefox, Apple Safari on iPhone/iPad/Mac, Android Webview, Samsung Internet**):
+The application is fully optimized for **smartphones, tablets, laptops, and desktops** across all modern browsers (**Google Chrome, Microsoft Edge, Mozilla Firefox, Apple Safari on iPhone/iPad/Mac, Android Chrome**):
+- **Touch-Friendly Interface**: Large buttons, smooth spacing, and mobile-ready layouts for outdoor use while collecting money.
 - **Door-to-Door Walk Ergonomics**: Touch targets are comfortably sized (minimum 42-44px) so you can tap them easily while walking outside with one hand.
 - **Swipeable Section Tabs**: Swipe through Sections A to I smoothly on your phone screen with your thumb.
 - **iOS Safari Safe**: Form inputs are calibrated so iPhone/iPad Safari will not disrupt your zoom level while typing names.
@@ -104,7 +105,7 @@ The application is fully optimized for **smartphones, tablets, laptops, and desk
 Your collection records and house details are protected with **multi-tier safety systems**:
 
 1. **Dual Storage Layers (LocalStorage + IndexedDB)**:
-   Every change is automatically written to both `localStorage` and `IndexedDB` persistent storage. If one storage area is ever cleared by a generic cache-cleaning tool, the system automatically recovers your complete database from the persistent IndexedDB backup!
+   Every change is automatically written to both `localStorage` and `IndexedDB` persistent storage. If one storage area is ever cleared by a generic cache-cleaning tool, the system automatically recovers from the other.
 2. **Browser Persistent Storage (`navigator.storage.persist()`)**:
    The app requests persistent storage privilege from the browser, instructing Chrome/Safari/Edge to never evict your data under disk pressure.
 3. **Live Auto-Save Indicator**:
@@ -124,4 +125,4 @@ Click **`📜 History`** on any room card to see a transparent ledger table show
 
 ---
 ## To view the live Site
-Visit : aquapay.yors.online 
+Visit: [aquapay.yors.online](https://aquapay.yors.online)
