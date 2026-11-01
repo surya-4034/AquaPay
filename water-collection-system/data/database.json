@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "systemTitle": "AquaPay",
+    "societyName": "AquaPay",
+    "collectorName": "Manager",
+    "defaultMonthlyBill": 250,
+    "currency": "₹",
+    "apiUrl": ""
+  },
+  "houses": [],
+  "collections": []
+}

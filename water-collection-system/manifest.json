@@ -1,0 +1,16 @@
+{
+  "name": "AquaPay - Water Collection",
+  "short_name": "AquaPay",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0284c7",
+  "theme_color": "#0284c7",
+  "description": "AquaPay - Water Money Collection System with Section-wise room ledger",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230284c7'/><path d='M50 18 C50 18 28 48 28 64 C28 76 38 86 50 86 C62 86 72 76 72 64 C72 48 50 18 50 18 Z' fill='%23ffffff'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

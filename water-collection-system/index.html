@@ -1,0 +1,3756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AquaPay">
+  <link rel="manifest" href="manifest.json">
+  <title>AquaPay - Water Money Collection System</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-light: #e0f2fe;
+      --primary-dark: #075985;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #0ea5e9 100%);
+      color: white;
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      font-size: 0.82rem;
+      opacity: 0.88;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Month Selector Bar */
+    .month-control-bar {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+
+    .month-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .month-btn {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .month-btn:hover {
+      background: #bae6fd;
+    }
+
+    .month-select {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background: #f1f5f9;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .month-select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-today {
+      background: #f1f5f9;
+      border: 1px solid var(--surface-border);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .btn-today:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .stat-collected::before { background: var(--success); }
+    .stat-pending::before { background: var(--danger); }
+    .stat-expected::before { background: var(--primary); }
+    .stat-houses::before { background: var(--warning); }
+
+    .stat-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-collected .stat-value { color: var(--success); }
+    .stat-pending .stat-value { color: var(--danger); }
+    .stat-expected .stat-value { color: var(--primary-dark); }
+    .stat-houses .stat-value { color: #b45309; }
+
+    .stat-subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar-bg {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* Filter & Search Bar */
+    .filter-bar {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+
+    .search-wrapper {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.6rem 1rem 0.6rem 2.4rem;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      font-size: 0.92rem;
+      background: #f8fafc;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-badge {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
+
+    .tab-btn.active .tab-badge {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    .btn-success:hover {
+      background: #15803d;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    /* Section Navigation Bar */
+    .section-nav-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-nav-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-nav-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      background: #f1f5f9;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .section-tabs-bar {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .section-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.48rem 0.85rem;
+      border-radius: 8px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .section-tab-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .section-tab-btn.active {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.35);
+    }
+
+    .section-tab-btn .badge-pill {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .section-tab-btn.active .badge-pill {
+      background: rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+    }
+
+    /* Section Group Containers (Blocks) */
+    .section-block {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.15rem;
+      border-bottom: 2px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .section-block-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-badge-large {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+
+    .section-name-text {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .section-meta-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .section-stats-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .section-stat-pill {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .section-stat-collected {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .section-stat-due {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .section-empty-card {
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius);
+      padding: 2rem 1.25rem;
+      text-align: center;
+      background: #f8fafc;
+      color: #64748b;
+    }
+
+    /* House Cards Grid */
+    .houses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+
+    .house-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .house-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #cbd5e1;
+    }
+
+    /* Dedicated 'Add Another House' Card in the Grid */
+    .add-house-card {
+      border: 2px dashed #93c5fd;
+      background: #f0f9ff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      min-height: 240px;
+      transition: all 0.2s ease;
+    }
+
+    .add-house-card:hover {
+      background: #e0f2fe;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .add-house-card .plus-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #bae6fd;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 0.85rem;
+      font-weight: 700;
+    }
+
+    .add-house-card h4 {
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .add-house-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      max-width: 220px;
+      line-height: 1.35;
+    }
+
+    .house-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .room-badge {
+      background: #0f172a;
+      color: white;
+      font-weight: 800;
+      font-size: 1.15rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      display: inline-block;
+      letter-spacing: 0.02em;
+    }
+
+    .resident-info {
+      flex: 1;
+      margin-left: 0.85rem;
+    }
+
+    .resident-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .resident-phone {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-paid {
+      background: var(--success-light);
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+
+    .badge-partial {
+      background: var(--warning-light);
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-unpaid {
+      background: var(--danger-light);
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Collection details in card */
+    .bill-details {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin: 0.75rem 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      text-align: center;
+      gap: 0.5rem;
+      border: 1px solid #f1f5f9;
+    }
+
+    .bill-stat-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .bill-stat-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-top: 0.15rem;
+    }
+
+    .val-bill { color: var(--text); }
+    .val-paid { color: var(--success); }
+    .val-due { color: var(--danger); }
+
+    .payment-meta {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .previous-dues-alert {
+      background: #fff7ed;
+      border: 1px dashed #fdba74;
+      color: #9a3412;
+      border-radius: 6px;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.45rem;
+      margin-top: auto;
+    }
+
+    .card-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* Table View mode */
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid var(--surface-border);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--surface-border);
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.35rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+      flex-wrap: wrap;
+    }
+
+    /* Form groups */
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      background: #ffffff;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .input-addon-group {
+      position: relative;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .input-with-prefix {
+      padding-left: 2.2rem;
+    }
+
+    .quick-amount-buttons {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-quick-amt {
+      background: #f1f5f9;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.55rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-quick-amt:hover {
+      background: #e2e8f0;
+    }
+
+    .calc-summary-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .calc-due-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #0f172a;
+      color: white;
+      padding: 0.85rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 100;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* =========================================================================
+       SAFETY STATUS BADGE & AUTO-SAVE INDICATOR
+       ========================================================================= */
+    .storage-safety-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #ffffff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .safe-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.35);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.7; }
+    }
+
+    .storage-safety-badge.saved-pulse {
+      background: rgba(16, 185, 129, 0.35);
+      border-color: #10b981;
+      transform: scale(1.02);
+    }
+
+    /* =========================================================================
+       RESPONSIVE DESIGN (Smartphones, Tablets, Laptops, Any Browser)
+       ========================================================================= */
+
+    /* Touch Device Touch Targets & Ergonomics */
+    @media (pointer: coarse) {
+      .btn, .btn-quick-amt, .month-btn, .section-tab-btn, .tab-btn {
+        min-height: 42px;
+      }
+      .form-control, select, input {
+        min-height: 44px;
+      }
+    }
+
+    /* Prevent iOS Safari from automatically zooming into inputs */
+    @media screen and (max-width: 768px) {
+      input, select, textarea, .form-control {
+        font-size: 16px !important;
+      }
+    }
+
+    /* Tablets & Laptops (max-width: 992px) */
+    @media (max-width: 992px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .houses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+
+    /* Mobile Phones & Handhelds (max-width: 768px) */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.85rem 0.85rem;
+      }
+
+      .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .brand {
+        justify-content: flex-start;
+      }
+
+      .brand h1 {
+        font-size: 1.15rem;
+      }
+
+      .brand p {
+        font-size: 0.75rem;
+      }
+
+      .header-actions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.45rem;
+        width: 100%;
+      }
+
+      .header-actions .storage-safety-badge {
+        grid-column: span 2;
+        justify-content: center;
+        padding: 0.4rem;
+        font-size: 0.82rem;
+      }
+
+      .header-actions .btn {
+        justify-content: center;
+        padding: 0.55rem 0.5rem;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      .header-actions .btn-primary {
+        grid-column: span 2;
+        padding: 0.7rem 1rem;
+        font-size: 0.95rem;
+      }
+
+      .container {
+        margin: 0.85rem auto;
+        padding: 0 0.65rem;
+      }
+
+      /* Month bar on mobile */
+      .month-control-bar {
+        padding: 0.85rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+
+      .month-picker-wrapper {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .month-select {
+        flex: 1;
+        font-size: 0.98rem;
+        text-align: center;
+      }
+
+      .month-control-bar .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Stats Overview on Mobile */
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .stat-card {
+        padding: 0.8rem 0.85rem;
+      }
+
+      .stat-value {
+        font-size: 1.35rem;
+      }
+
+      .stat-title {
+        font-size: 0.72rem;
+      }
+
+      .stat-subtext {
+        font-size: 0.7rem;
+      }
+
+      /* Section Navigation Bar: Smooth horizontal touch scrolling */
+      .section-nav-wrapper {
+        padding: 0.75rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .section-nav-header {
+        margin-bottom: 0.45rem;
+      }
+
+      .section-tabs-bar {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.4rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        gap: 0.35rem;
+      }
+
+      .section-tab-btn {
+        flex: 0 0 auto;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      /* Filter Bar on Mobile */
+      .filter-bar {
+        padding: 0.75rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+      }
+
+      .search-wrapper {
+        width: 100%;
+        min-width: unset;
+      }
+
+      .filter-tabs {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: 100%;
+        padding-bottom: 3px;
+        gap: 0.35rem;
+      }
+
+      .filter-tabs .tab-btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+      }
+
+      #viewToggleBtn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Section Blocks on Mobile */
+      .section-block {
+        padding: 0.85rem 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-block-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.65rem;
+      }
+
+      .section-block-header > div:last-child {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .section-block-header .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .section-stats-pills {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      /* House Cards on Mobile */
+      .houses-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .house-card {
+        padding: 0.95rem;
+      }
+
+      .card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .card-actions .btn-primary {
+        flex: 1 1 100%;
+        justify-content: center;
+        padding: 0.65rem;
+        font-size: 0.95rem;
+      }
+
+      .card-actions .btn-outline {
+        flex: 1;
+        justify-content: center;
+        padding: 0.5rem;
+      }
+
+      /* Modals on Mobile */
+      .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
+
+      .modal {
+        max-width: 100%;
+        width: 100%;
+        max-height: 94vh;
+        border-radius: 16px 16px 0 0;
+      }
+
+      .modal-header {
+        padding: 1rem;
+      }
+
+      .modal-body {
+        padding: 1rem;
+      }
+
+      .modal-footer {
+        padding: 0.85rem 1rem;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+      }
+
+      .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem;
+      }
+
+      /* Force form-rows to stack vertically on phones so inputs aren't crushed */
+      .form-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.65rem !important;
+      }
+
+      .form-row > .form-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+      }
+
+      /* Quick Amount buttons on Mobile */
+      .quick-amount-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+      }
+
+      .quick-amount-buttons button:last-child {
+        grid-column: span 2;
+      }
+
+      /* Table responsive scroll wrapper */
+      .table-container {
+        border-radius: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+      }
+
+      table {
+        min-width: 720px;
+      }
+
+      table th, table td {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      /* Toast on Mobile */
+      .toast {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    /* Small Phones (max-width: 380px) */
+    @media (max-width: 380px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .brand h1 {
+        font-size: 1.05rem;
+      }
+      .header-actions {
+        grid-template-columns: 1fr;
+      }
+      .header-actions .btn {
+        grid-column: span 1;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding-bottom: 0;
+      }
+      header, .month-control-bar, .filter-bar, .section-nav-wrapper, .card-actions, .btn, .no-print, .stats-grid, .progress-container, .add-house-card {
+        display: none !important;
+      }
+      .table-container {
+        display: block !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      table {
+        border: 1px solid #000;
+      }
+      th, td {
+        border: 1px solid #000 !important;
+        padding: 6px 8px !important;
+        font-size: 11pt !important;
+      }
+      .print-header {
+        display: block !important;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+    }
+
+    .print-header {
+      display: none;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: white;
+      border: 1px dashed var(--surface-border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Printable Header -->
+  <div class="print-header">
+    <h2 id="printSocietyTitle">AquaPay</h2>
+    <h3>Monthly Water Money Collection Sheet</h3>
+    <p id="printMonthSubtitle">Month: November 2026</p>
+  </div>
+
+  <!-- Main App Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 id="headerSocietyName">AquaPay</h1>
+          <p id="headerSubtitle">Manual House Registration & Monthly Collection</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- Live Auto-Save & Safety Protection Indicator -->
+        <div class="storage-safety-badge" id="storageSafetyBadge" title="Multi-layer offline persistence active: LocalStorage + IndexedDB">
+          <span class="safe-pulse-dot"></span>
+          <span id="storageSafetyText">Auto-Saved & Safe</span>
+        </div>
+
+        <button class="btn btn-outline btn-sm" onclick="downloadBackup()" title="Download a permanent safety backup file to phone/PC (Never lose data)">
+          💾 Save Backup File
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Export current month to Excel/CSV">
+          📊 Export CSV
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openSettingsModal()" title="Settings & Backup">
+          ⚙️ Settings
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="window.print()" title="Print Collection Sheet">
+          🖨️ Print
+        </button>
+        <button class="btn btn-primary" onclick="openAddHouseModal()">
+          + Add House
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Month Navigation Bar -->
+    <div class="month-control-bar">
+      <div class="month-picker-wrapper">
+        <button class="month-btn" onclick="changeMonth(-1)" title="Previous Month">❮</button>
+        <select id="monthSelect" class="month-select" onchange="onMonthSelectChange(this.value)">
+          <!-- Generated via JS -->
+        </select>
+        <button class="month-btn" onclick="changeMonth(1)" title="Next Month">❯</button>
+        <button class="btn-today" onclick="goToCurrentMonth()">This Month</button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Standard Rate: <b id="displayDefaultRate">₹250</b> / mo</span>
+        <button class="btn btn-outline btn-sm" onclick="rolloutNextMonthPrompt()" title="Prepare next month entries">
+          🔄 Roll Over to Next Month
+        </button>
+      </div>
+    </div>
+
+    <!-- Monthly Stats Overview Cards -->
+    <div class="stats-grid">
+      <div class="stat-card stat-collected">
+        <span class="stat-title">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          Total Collected
+        </span>
+        <span class="stat-value" id="statTotalCollected">₹0</span>
+        <span class="stat-subtext" id="statCollectedSubtext">From 0 houses</span>
+      </div>
+
+      <div class="stat-card stat-pending">
+        <span class="stat-title">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+          Total Remaining / Due
+        </span>
+        <span class="stat-value" id="statTotalRemaining">₹0</span>
+        <span class="stat-subtext" id="statPendingSubtext">Pending collection</span>
+      </div>
+
+      <div class="stat-card stat-expected">
+        <span class="stat-title">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
+          Target / Expected
+        </span>
+        <span class="stat-value" id="statTotalExpected">₹0</span>
+        <span class="stat-subtext" id="statTargetSubtext">Total monthly bill</span>
+      </div>
+
+      <div class="stat-card stat-houses">
+        <span class="stat-title">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+          Houses Progress
+        </span>
+        <span class="stat-value" id="statProgressRatio">0 / 0</span>
+        <span class="stat-subtext" id="statProgressPercent">0% collected</span>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Month Completion Status</span>
+        <span id="progressBarLabel">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progressBarFill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Section Navigation Bar (Sections A to I) -->
+    <div class="section-nav-wrapper">
+      <div class="section-nav-header">
+        <div class="section-nav-title">
+          <span>🏢 Area Sections (A to I):</span>
+          <span class="section-nav-subtitle" id="activeSectionSummary">Showing All Sections (A to I)</span>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+          Select a Section to view its rooms, or choose All
+        </div>
+      </div>
+      <div class="section-tabs-bar" id="sectionTabsBar">
+        <button type="button" class="section-tab-btn active" data-section="ALL" onclick="selectSection('ALL')">
+          <span>🏢 All (A - I)</span>
+          <span class="badge-pill" id="secBadge_ALL">1</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="A" onclick="selectSection('A')">
+          <span>Sec A</span>
+          <span class="badge-pill" id="secBadge_A">1</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="B" onclick="selectSection('B')">
+          <span>Sec B</span>
+          <span class="badge-pill" id="secBadge_B">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="C" onclick="selectSection('C')">
+          <span>Sec C</span>
+          <span class="badge-pill" id="secBadge_C">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="D" onclick="selectSection('D')">
+          <span>Sec D</span>
+          <span class="badge-pill" id="secBadge_D">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="E" onclick="selectSection('E')">
+          <span>Sec E</span>
+          <span class="badge-pill" id="secBadge_E">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="F" onclick="selectSection('F')">
+          <span>Sec F</span>
+          <span class="badge-pill" id="secBadge_F">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="G" onclick="selectSection('G')">
+          <span>Sec G</span>
+          <span class="badge-pill" id="secBadge_G">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="H" onclick="selectSection('H')">
+          <span>Sec H</span>
+          <span class="badge-pill" id="secBadge_H">0</span>
+        </button>
+        <button type="button" class="section-tab-btn" data-section="I" onclick="selectSection('I')">
+          <span>Sec I</span>
+          <span class="badge-pill" id="secBadge_I">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="filter-bar">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Room No (e.g. A1, B2) or Resident Name..." oninput="filterHouses()">
+      </div>
+
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="ALL" onclick="setFilter('ALL')">
+          All Houses <span class="tab-badge" id="badgeAll">0</span>
+        </button>
+        <button class="tab-btn" data-filter="PAID" onclick="setFilter('PAID')">
+          Paid Full <span class="tab-badge" id="badgePaid">0</span>
+        </button>
+        <button class="tab-btn" data-filter="PARTIAL" onclick="setFilter('PARTIAL')">
+          Partial <span class="tab-badge" id="badgePartial">0</span>
+        </button>
+        <button class="tab-btn" data-filter="UNPAID" onclick="setFilter('UNPAID')">
+          Pending <span class="tab-badge" id="badgeUnpaid">0</span>
+        </button>
+      </div>
+
+      <div style="display:flex; gap:0.4rem;">
+        <button class="btn btn-outline btn-sm" id="viewToggleBtn" onclick="toggleViewMode()">
+          📋 Switch to Table View
+        </button>
+      </div>
+    </div>
+
+    <!-- Section-wise Rooms Display (Default Walk Cards Mode) -->
+    <div id="sectionsContainer">
+      <!-- Section blocks & room cards rendered dynamically -->
+    </div>
+
+    <!-- Table Mode (Hidden by default, used for print & table view) -->
+    <div id="tableContainer" class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Room</th>
+            <th>Resident Name</th>
+            <th>Past Dues</th>
+            <th>Month Bill</th>
+            <th>Total Payable</th>
+            <th>Amount Paid</th>
+            <th>Total Remaining Balance</th>
+            <th>Status</th>
+            <th>Payment Date</th>
+            <th>Mode</th>
+            <th class="no-print">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Table rows rendered dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <h3>No houses match your search or filter</h3>
+      <p style="margin-top:0.5rem;">Try changing your search keywords or click <b>+ Add House</b> to add rooms.</p>
+    </div>
+
+  </div>
+
+  <!-- MODAL: Record / Update Payment -->
+  <div id="paymentModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="pmHouseTitle">Room A1 - Record Payment</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted);" id="pmMonthSubtitle">Select month below to update</p>
+        </div>
+        <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Month Selector inside Payment Modal -->
+        <div style="background: #e0f2fe; border: 1.5px solid #7dd3fc; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.15rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <label style="font-weight:700; color:#0369a1; margin-bottom:0; font-size:0.88rem; display:flex; align-items:center; gap:0.4rem;">
+              📅 Select Billing Month:
+            </label>
+            <span id="pmActiveMonthStatus" class="status-badge badge-paid" style="font-size:0.75rem;">Recorded</span>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button type="button" class="month-btn" onclick="stepModalMonth(-1)" title="Previous Month" style="width:38px; height:38px; background:white; border:1px solid #cbd5e1; font-weight:bold; cursor:pointer;">❮</button>
+            <select id="pmMonthSelector" class="form-control" style="font-size:1.05rem; font-weight:700; color:#0f172a; cursor:pointer; background:white; border:2px solid #0284c7; flex:1;" onchange="onModalMonthSelect(this.value)">
+              <!-- Options populated dynamically -->
+            </select>
+            <button type="button" class="month-btn" onclick="stepModalMonth(1)" title="Next Month" style="width:38px; height:38px; background:white; border:1px solid #cbd5e1; font-weight:bold; cursor:pointer;">❯</button>
+          </div>
+          <div style="font-size:0.78rem; color:#0369a1; margin-top:0.35rem; font-weight:600;">
+            💡 You can switch to any month (November, December, January...) to record or view its payment.
+          </div>
+        </div>
+
+        <!-- Account Running Balance Breakdown Box -->
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 1.15rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.45rem; border-bottom: 1px dashed #cbd5e1; font-size: 0.88rem;">
+            <span style="color: #64748b;">⏳ Previous Unpaid Balance (from past months):</span>
+            <span id="pmPrevDuesText" style="font-weight: 700; color: #dc2626;">₹0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0; border-bottom: 1.5px solid #94a3b8; font-size: 0.88rem;">
+            <span style="color: #0369a1; font-weight: 600;">💧 Water Bill for This Month:</span>
+            <span id="pmMonthBillText" style="font-weight: 700; color: #0284c7;">₹250</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.55rem; font-size: 1.05rem;">
+            <span style="font-weight: 800; color: #0f172a;">💰 TOTAL PAYABLE AMOUNT:</span>
+            <span id="pmTotalPayableVal" style="font-weight: 900; color: #0f172a; font-size: 1.25rem;">₹250</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Water Bill This Month</label>
+            <div class="input-addon-group">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="pmBillAmount" class="form-control input-with-prefix" oninput="calculateBalance()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 700; color: #0284c7;">Amount Given / Paid Today *</label>
+            <div class="input-addon-group">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="pmPaidAmount" class="form-control input-with-prefix" style="border: 2px solid #0284c7; font-weight: 700; font-size: 1.05rem;" oninput="calculateBalance()">
+            </div>
+            <div class="quick-amount-buttons">
+              <button type="button" class="btn-quick-amt" id="btnPayFullTotal" onclick="setQuickPaid('TOTAL')">Pay Full Total (₹250)</button>
+              <button type="button" class="btn-quick-amt" id="btnPayBillOnly" onclick="setQuickPaid('BILL_ONLY')">Pay Bill Only (₹250)</button>
+              <button type="button" class="btn-quick-amt" onclick="setQuickPaid('ZERO')">Mark Unpaid (₹0)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Calculation Box -->
+        <div id="pmCalcBox" class="calc-summary-box" style="padding: 0.9rem 1rem;">
+          <div>
+            <div style="font-size:0.78rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">TOTAL REMAINING BALANCE</div>
+            <div style="font-size:1.55rem; font-weight:900;" id="pmRemainingVal">₹0</div>
+            <div id="pmBalanceBreakdownSubtext" style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">All dues cleared</div>
+          </div>
+          <div id="pmStatusBadge" class="status-badge badge-paid" style="font-size: 0.82rem; padding: 0.4rem 0.75rem;">PAID IN FULL</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date of Payment</label>
+            <input type="date" id="pmDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Mode</label>
+            <select id="pmMode" class="form-control">
+              <option value="Cash">Cash</option>
+              <option value="GooglePay / UPI">GooglePay / PhonePe / UPI</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Cheque">Cheque</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notes / Remarks (Optional)</label>
+          <input type="text" id="pmNotes" class="form-control" placeholder="e.g. Paid in cash, promised balance on Monday">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="copyReceiptText()">📋 Copy Receipt</button>
+        <button class="btn btn-outline" onclick="closeModal('paymentModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="savePayment(false)">Save Payment</button>
+        <button class="btn btn-success" id="btnSaveAndNext" onclick="savePayment(true)">Save & Next Room ❯</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add / Edit House (Manual Entry by Self) -->
+  <div id="houseModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="houseModalTitle">+ Add House / Room</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted);" id="houseModalSubtitle">Enter Room Number and Resident Name</p>
+        </div>
+        <button class="modal-close" onclick="closeModal('houseModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="hmEditId" value="">
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 0 0 135px;">
+            <label class="form-label">Section *</label>
+            <select id="hmSection" class="form-control" onchange="onSectionSelectChange(this.value)" style="font-weight:700;">
+              <option value="A">Section A</option>
+              <option value="B">Section B</option>
+              <option value="C">Section C</option>
+              <option value="D">Section D</option>
+              <option value="E">Section E</option>
+              <option value="F">Section F</option>
+              <option value="G">Section G</option>
+              <option value="H">Section H</option>
+              <option value="I">Section I</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Room Number *</label>
+            <input type="text" id="hmRoomNo" class="form-control" placeholder="e.g. A1, A2, B1..." required autofocus style="font-weight:700;">
+          </div>
+          <div class="form-group" style="flex: 2;">
+            <label class="form-label">Resident Name *</label>
+            <input type="text" id="hmResidentName" class="form-control" placeholder="Resident full name" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Phone / WhatsApp (Optional)</label>
+            <input type="tel" id="hmPhone" class="form-control" placeholder="10-digit mobile number">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="hmActive" class="form-control">
+              <option value="true">Active (Occupied)</option>
+              <option value="false">Vacant / Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Remarks / Notes (Optional)</label>
+          <input type="text" id="hmNotes" class="form-control" placeholder="e.g. Ground floor, owner, etc.">
+        </div>
+
+        <!-- Optional: Collect / Record Initial Payment on the Spot -->
+        <div id="hmPaymentSection" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.85rem; margin-top: 0.5rem;">
+          <label style="display:flex; align-items:center; gap:0.5rem; font-weight:700; cursor:pointer; color:#166534;">
+            <input type="checkbox" id="hmRecordNow" onchange="toggleAddHousePayment(this.checked)">
+            <span>Record payment for <b id="hmMonthText">November 2026</b> right now?</span>
+          </label>
+          <div id="hmPaymentFields" style="display:none; margin-top:0.75rem;">
+            <div class="form-group" style="margin-bottom:0.6rem;">
+              <label class="form-label" style="font-size:0.8rem; font-weight:700;">Select Billing Month</label>
+              <select id="hmPayMonth" class="form-control" style="background:white; font-weight:700; border:1.5px solid #16a34a;">
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0.5rem;">
+                <label class="form-label" style="font-size:0.8rem;">Water Bill (₹)</label>
+                <input type="number" id="hmPayBill" class="form-control" value="250" oninput="calculateAddHouseBalance()">
+              </div>
+              <div class="form-group" style="margin-bottom:0.5rem;">
+                <label class="form-label" style="font-size:0.8rem;">Amount Given (₹)</label>
+                <input type="number" id="hmPayGiven" class="form-control" value="250" oninput="calculateAddHouseBalance()">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:0.35rem;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" style="font-size:0.8rem;">Payment Mode</label>
+                <select id="hmPayMode" class="form-control">
+                  <option value="Cash">Cash</option>
+                  <option value="GooglePay / UPI">GooglePay / PhonePe / UPI</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" style="font-size:0.8rem;">Remaining Due</label>
+                <input type="text" id="hmPayRemaining" class="form-control" value="₹0" readonly style="font-weight:bold; background:#e2e8f0;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-sm" id="btnDeleteHouse" style="margin-right:auto; display:none;" onclick="deleteCurrentEditHouse()">
+          🗑️ Delete House
+        </button>
+        <button type="button" class="btn btn-outline" onclick="closeModal('houseModal')">Cancel</button>
+        <button type="button" class="btn btn-success" id="btnSaveAndAddAnother" onclick="saveHouse(true)">
+          Save & Add Next House ❯
+        </button>
+        <button type="button" class="btn btn-primary" onclick="saveHouse(false)">Save House</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: House Account Ledger / History -->
+  <div id="historyModal" class="modal-overlay">
+    <div class="modal" style="max-width: 780px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="histTitle">Room A1 - Payment History</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted);" id="histSubtitle">Lifetime Account Ledger</p>
+        </div>
+        <button class="modal-close" onclick="closeModal('historyModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:1rem;">
+          <div class="stat-card" style="padding:0.75rem;">
+            <span class="stat-title">Total Billed</span>
+            <span class="stat-value" style="font-size:1.3rem;" id="histTotalBilled">₹0</span>
+          </div>
+          <div class="stat-card stat-collected" style="padding:0.75rem;">
+            <span class="stat-title">Total Paid</span>
+            <span class="stat-value" style="font-size:1.3rem;" id="histTotalPaid">₹0</span>
+          </div>
+          <div class="stat-card stat-pending" style="padding:0.75rem;">
+            <span class="stat-title">Current Outstanding Balance</span>
+            <span class="stat-value" style="font-size:1.3rem;" id="histTotalDue">₹0</span>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table style="font-size:0.85rem;">
+            <thead>
+              <tr>
+                <th>Billing Month</th>
+                <th>Past Dues</th>
+                <th>Month Bill</th>
+                <th>Total Payable</th>
+                <th>Amount Paid</th>
+                <th>Remaining Balance</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="histTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('historyModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Settings & Backup -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ System Settings & Data Backup</h3>
+        <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Building / Society / Apartment Name</label>
+          <input type="text" id="cfgSocietyName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Default Monthly Water Bill per House (₹)</label>
+          <input type="number" id="cfgDefaultRate" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Collector / Manager Name</label>
+          <input type="text" id="cfgCollectorName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🌐 Central Backend API Server URL (Optional)</label>
+          <input type="url" id="cfgApiUrl" class="form-control" placeholder="e.g. https://aquapay.onrender.com (or leave blank for same domain / Cloudflare Pages)">
+          <small style="color:var(--text-muted); font-size:0.75rem;">
+            Leave blank if using Cloudflare Pages or hosting both on the same domain. Only enter a URL if your backend API is hosted on a separate server (like Render).
+          </small>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--surface-border); margin:1.25rem 0;">
+
+        <h4 style="font-size:0.95rem; margin-bottom:0.65rem;">🛡️ Data Safety & Multi-Layer Offline Protection</h4>
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:0.85rem; margin-bottom:1rem; font-size:0.84rem; color:#166534;">
+          <div style="font-weight:700; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.4rem;">
+            <span>✅ Multi-Layer Automatic Persistence Active</span>
+          </div>
+          <div>All houses and payments are automatically saved to <b>both LocalStorage & IndexedDB offline cache</b>. Your data stays safe on this device even if you close the browser, turn off the computer, or go offline.</div>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.15rem;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="downloadBackup()">📥 Download Permanent Backup File</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="syncWithServer()">🔄 Sync with Server Now</button>
+          <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+            📤 Restore from Backup File
+            <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleRestore(event)">
+          </label>
+        </div>
+
+        <!-- Snapshots Section -->
+        <h5 style="font-size:0.88rem; margin-bottom:0.45rem; color:#334155;">🕒 Recent Automatic Snapshots (Safety History):</h5>
+        <div id="snapshotList" style="background:#f8fafc; border:1px solid var(--surface-border); border-radius:8px; padding:0.65rem; max-height:140px; overflow-y:auto; font-size:0.82rem; margin-bottom:1.25rem;">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--surface-border); margin:1.25rem 0;">
+
+        <h4 style="font-size:0.95rem; margin-bottom:0.5rem; color:var(--danger);">🗑️ Clear All Data (Start Fresh)</h4>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          Wipe all records and start completely clean with 0 rooms and zero dummy data. Protected by typing CLEAR.
+        </p>
+        <button class="btn btn-danger btn-sm" onclick="clearAllData()">
+          🗑️ Wipe All Records & Start Fresh (0 Rooms)
+        </button>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('settingsModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification element -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Action completed successfully</span>
+  </div>
+
+  <script>
+    // Sections in the area (Alphabetical A to I)
+    const SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+    let currentSection = "ALL";
+
+    // Initial Clean Database Structure (zero dummy data)
+    const DEFAULT_DB = {
+      settings: {
+        systemTitle: "AquaPay",
+        societyName: "AquaPay",
+        collectorName: "Manager",
+        defaultMonthlyBill: 250,
+        currency: "₹",
+        apiUrl: ""
+      },
+      houses: [],
+      collections: []
+    };
+
+    // Application State
+    let db = { ...DEFAULT_DB };
+    let currentMonth = "2026-11"; // starts from November 2026
+    let modalSelectedMonth = "2026-11"; // currently viewed month in payment modal
+    let currentFilter = "ALL";
+    let isTableView = false;
+    let editingPaymentHouse = null;
+
+    // Local Storage & Snapshot Keys
+    const STORAGE_KEY = "water_collection_db_v3";
+    const SNAPSHOTS_KEY = "water_collection_snapshots";
+
+    // IndexedDB Persistent Mirror Configuration
+    const IDB_NAME = "WaterCollectionOfflineDB";
+    const IDB_VERSION = 1;
+    const IDB_STORE = "offline_data";
+
+    function openIndexedDB() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) {
+          resolve(null);
+          return;
+        }
+        try {
+          const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+          req.onupgradeneeded = (e) => {
+            const idb = e.target.result;
+            if (!idb.objectStoreNames.contains(IDB_STORE)) {
+              idb.createObjectStore(IDB_STORE, { keyPath: "key" });
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        } catch {
+          resolve(null);
+        }
+      });
+    }
+
+    async function saveToIndexedDB(data) {
+      try {
+        const idb = await openIndexedDB();
+        if (!idb) return;
+        const tx = idb.transaction(IDB_STORE, "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        store.put({ key: "current_backup", data: JSON.parse(JSON.stringify(data)), updatedAt: new Date().toISOString() });
+      } catch (err) {
+        console.warn("IndexedDB mirror write note:", err);
+      }
+    }
+
+    async function loadFromIndexedDB() {
+      try {
+        const idb = await openIndexedDB();
+        if (!idb) return null;
+        return new Promise((resolve) => {
+          const tx = idb.transaction(IDB_STORE, "readonly");
+          const store = tx.objectStore(IDB_STORE);
+          const req = store.get("current_backup");
+          req.onsuccess = () => resolve(req.result && req.result.data ? req.result.data : null);
+          req.onerror = () => resolve(null);
+        });
+      } catch {
+        return null;
+      }
+    }
+
+    // Rolling Automatic Snapshots History (Never lose work)
+    function saveRollingSnapshot(data) {
+      try {
+        let snapshots = [];
+        const raw = localStorage.getItem(SNAPSHOTS_KEY);
+        if (raw) {
+          try { snapshots = JSON.parse(raw); } catch { snapshots = []; }
+        }
+        if (!Array.isArray(snapshots)) snapshots = [];
+
+        snapshots.unshift({
+          timestamp: new Date().toISOString(),
+          housesCount: data.houses ? data.houses.length : 0,
+          collectionsCount: data.collections ? data.collections.length : 0,
+          data: JSON.parse(JSON.stringify(data))
+        });
+
+        // Retain last 5 snapshots
+        if (snapshots.length > 5) {
+          snapshots = snapshots.slice(0, 5);
+        }
+        localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots));
+      } catch (e) {}
+    }
+
+    // Live Storage Safety Status Badge
+    let isServerConnected = false;
+
+    function updateSaveStatusIndicator(mode) {
+      const badge = document.getElementById("storageSafetyBadge");
+      const text = document.getElementById("storageSafetyText");
+      if (!badge || !text) return;
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      if (mode === "CLOUD_SYNCED" || isServerConnected) {
+        text.textContent = `Cloud Synced (${timeStr})`;
+        badge.style.background = "rgba(16, 185, 129, 0.25)";
+        badge.style.borderColor = "#10b981";
+      } else {
+        text.textContent = `Auto-Saved (${timeStr})`;
+      }
+      badge.classList.add("saved-pulse");
+      setTimeout(() => badge.classList.remove("saved-pulse"), 800);
+    }
+
+    // Initialize Application
+    window.addEventListener("DOMContentLoaded", async () => {
+      await loadDatabase();
+      initMonthDropdown();
+      renderAll();
+
+      // Request browser persistent storage permission so data is never evicted under storage pressure
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().then(granted => {
+          console.log("Persistent storage granted by browser:", granted);
+        }).catch(() => {});
+      }
+    });
+
+    // Auto-sync when phone regains internet connection
+    window.addEventListener("online", () => {
+      showToast("🌐 Internet reconnected! Syncing with central server...");
+      saveDatabase();
+    });
+
+    // API Endpoint resolver (supports relative /api/data or external cloud backend)
+    function getApiEndpoint(endpointPath) {
+      const base = (db && db.settings && db.settings.apiUrl) ? db.settings.apiUrl.trim().replace(/\/+$/, "") : "";
+      return base ? `${base}${endpointPath}` : endpointPath;
+    }
+
+    // Manual server sync action
+    async function syncWithServer() {
+      showToast("🔄 Connecting to central server...");
+      try {
+        const res = await fetch(getApiEndpoint("/api/data"), { cache: "no-store" });
+        if (res.ok) {
+          const serverDb = await res.json();
+          if (serverDb && Array.isArray(serverDb.houses)) {
+            db = serverDb;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+            saveToIndexedDB(db);
+            isServerConnected = true;
+            renderAll();
+            updateSaveStatusIndicator("CLOUD_SYNCED");
+            showToast("✅ Successfully synced with central cloud database!");
+            return;
+          }
+        }
+        showToast("⚠️ Could not reach server. Using offline local records.");
+      } catch {
+        showToast("⚠️ Server is currently offline. Your local data is safe!");
+      }
+    }
+
+    // Multi-Layer Database Load & Save
+    async function loadDatabase() {
+      try {
+        let loaded = null;
+
+        // Layer 0: Check Central Backend Server (If hosted online, Cloudflare Pages KV, or running server.js)
+        try {
+          const res = await fetch(getApiEndpoint("/api/data"), { cache: "no-store" });
+          if (res.ok) {
+            const serverDb = await res.json();
+            if (serverDb && Array.isArray(serverDb.houses) && serverDb.houses.length > 0) {
+              loaded = serverDb;
+              isServerConnected = true;
+              console.log("Loaded central database from backend server!");
+            }
+          }
+        } catch {
+          // Server offline or running as static file: seamless local fallback
+        }
+
+        // Layer 1: Check primary LocalStorage if server was unreachable
+        if (!loaded) {
+          const savedV3 = localStorage.getItem(STORAGE_KEY);
+          if (savedV3) {
+            try { loaded = JSON.parse(savedV3); } catch {}
+          }
+        }
+
+        // Layer 2: Fallback to persistent IndexedDB mirror if localStorage was cleared
+        if (!loaded) {
+          const idbData = await loadFromIndexedDB();
+          if (idbData && Array.isArray(idbData.houses) && idbData.houses.length > 0) {
+            loaded = idbData;
+            console.log("Database recovered from persistent IndexedDB backup!");
+          }
+        }
+
+        // Layer 3: Migrate previous data versions if user had added houses
+        if (!loaded) {
+          const savedOld = localStorage.getItem("water_collection_db_v2") || localStorage.getItem("water_collection_db_v1");
+          if (savedOld) {
+            try {
+              const oldDb = JSON.parse(savedOld);
+              if (oldDb && Array.isArray(oldDb.houses) && oldDb.houses.length > 1) {
+                const housesWithSection = oldDb.houses.map(h => ({
+                  ...h,
+                  section: h.section || getHouseSection(h.roomNo)
+                }));
+                loaded = {
+                  ...DEFAULT_DB,
+                  houses: housesWithSection,
+                  settings: oldDb.settings || DEFAULT_DB.settings,
+                  collections: oldDb.collections || [ ...DEFAULT_DB.collections ]
+                };
+              }
+            } catch {}
+          }
+        }
+
+        db = loaded || JSON.parse(JSON.stringify(DEFAULT_DB));
+
+        // Ensure every house has a valid section
+        if (db && Array.isArray(db.houses)) {
+          db.houses.forEach(h => {
+            if (!h.section) h.section = getHouseSection(h.roomNo);
+          });
+          // Auto-remove dummy seed accounts (e.g. Rahul Sharma / dummy Room A1) so hosted site & app have 0 dummy records
+          db.houses = db.houses.filter(h => {
+            const isDummy = (h.id === "h_A1" && (h.residentName === "Rahul Sharma" || !h.residentName)) ||
+                            (h.residentName && h.residentName.trim().toLowerCase() === "rahul sharma") ||
+                            (h.notes && h.notes.toLowerCase().includes("test account"));
+            return !isDummy;
+          });
+        }
+        if (db && Array.isArray(db.collections)) {
+          db.collections = db.collections.filter(c => c.houseId !== "h_A1" && c.id !== "col_A1_2026-11");
+        }
+
+        // Auto-upgrade legacy placeholder names to AquaPay
+        if (db && db.settings) {
+          const sName = (db.settings.societyName || "").trim().toLowerCase();
+          if (!sName || sName.includes("ganesh") || sName.includes("krupa") || sName.includes("water money")) {
+            db.settings.societyName = "AquaPay";
+          }
+          const sTitle = (db.settings.systemTitle || "").trim().toLowerCase();
+          if (!sTitle || sTitle.includes("ganesh") || sTitle.includes("krupa") || sTitle.includes("water money")) {
+            db.settings.systemTitle = "AquaPay";
+          }
+        }
+
+        // Immediately sync across all storage layers
+        saveDatabase();
+      } catch (e) {
+        console.error("Failed to load local DB", e);
+        db = JSON.parse(JSON.stringify(DEFAULT_DB));
+      }
+    }
+
+    function saveDatabase() {
+      try {
+        const jsonStr = JSON.stringify(db);
+        // 1. Save to primary LocalStorage (instant response)
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+
+        // 2. Mirror to persistent IndexedDB
+        saveToIndexedDB(db);
+
+        // 3. Save rolling safety snapshot
+        saveRollingSnapshot(db);
+
+        // 4. Update visual safety badge
+        updateSaveStatusIndicator();
+
+        // 5. Sync to Central Cloud Server API
+        fetch(getApiEndpoint("/api/data"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: jsonStr
+        }).then(res => {
+          if (res.ok) {
+            isServerConnected = true;
+            updateSaveStatusIndicator("CLOUD_SYNCED");
+          }
+        }).catch(() => {
+          // If server is unreachable, phone keeps local copy until online
+          isServerConnected = false;
+        });
+      } catch (e) {
+        console.error("Failed to save DB", e);
+      }
+    }
+
+    // Month Selector logic
+    function populateMonthSelect(elementId, selectedVal) {
+      const select = document.getElementById(elementId);
+      if (!select) return;
+      select.innerHTML = "";
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+
+      // Offer options for 2025, 2026, 2027
+      [2025, 2026, 2027].forEach(year => {
+        months.forEach((mName, idx) => {
+          const mNum = String(idx + 1).padStart(2, "0");
+          const mKey = `${year}-${mNum}`;
+          const opt = document.createElement("option");
+          opt.value = mKey;
+          opt.textContent = `${mName} ${year}`;
+          if (mKey === selectedVal) opt.selected = true;
+          select.appendChild(opt);
+        });
+      });
+    }
+
+    function initMonthDropdown() {
+      populateMonthSelect("monthSelect", currentMonth);
+    }
+
+    function onMonthSelectChange(val) {
+      currentMonth = val;
+      renderAll();
+    }
+
+    function changeMonth(delta) {
+      const [yearStr, monthStr] = currentMonth.split("-");
+      let year = parseInt(yearStr);
+      let month = parseInt(monthStr) + delta;
+
+      if (month < 1) {
+        month = 12;
+        year--;
+      } else if (month > 12) {
+        month = 1;
+        year++;
+      }
+
+      currentMonth = `${year}-${String(month).padStart(2, "0")}`;
+      document.getElementById("monthSelect").value = currentMonth;
+      renderAll();
+    }
+
+    function goToCurrentMonth() {
+      const now = new Date();
+      currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      const sel = document.getElementById("monthSelect");
+      if (sel) sel.value = currentMonth;
+      renderAll();
+    }
+
+    function formatMonthTitle(mKey) {
+      const [year, month] = mKey.split("-");
+      const d = new Date(parseInt(year), parseInt(month) - 1, 1);
+      return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    }
+
+    // Render Everything
+    function renderAll() {
+      updateHeaderAndSettings();
+      renderHouses();
+      updateStats();
+    }
+
+    function updateHeaderAndSettings() {
+      const society = db.settings.societyName || "AquaPay";
+      const totalHouses = db.houses.filter(h => h.active).length;
+      document.getElementById("headerSocietyName").textContent = society;
+      document.getElementById("headerSubtitle").textContent = totalHouses === 0 
+        ? "0 Houses registered • Ready for Sections A to I" 
+        : `Registered: ${totalHouses} ${totalHouses === 1 ? 'House' : 'Houses'} (Capacity: ~60)`;
+      document.getElementById("printSocietyTitle").textContent = society;
+      document.getElementById("printMonthSubtitle").textContent = "Month: " + formatMonthTitle(currentMonth);
+      document.getElementById("displayDefaultRate").textContent = (db.settings.currency || "₹") + (db.settings.defaultMonthlyBill || 250);
+    }
+
+    function getCollectionRecord(houseId, month) {
+      return db.collections.find(c => c.houseId === houseId && c.month === month);
+    }
+
+    // Running balance calculator: calculates outstanding dues from previous months
+    function getPreviousOutstandingDues(houseId, targetMonth) {
+      const priorRecords = db.collections
+        .filter(c => c.houseId === houseId && c.month < targetMonth)
+        .sort((a, b) => a.month.localeCompare(b.month));
+
+      if (priorRecords.length === 0) return 0;
+
+      let runningDue = 0;
+      priorRecords.forEach(rec => {
+        const bill = Number(rec.billAmount) || 0;
+        const paid = Number(rec.paidAmount) || 0;
+        const totalPayable = runningDue + bill;
+        runningDue = Math.max(0, totalPayable - paid);
+      });
+
+      return runningDue;
+    }
+
+    // Cascade balance updates through all months of a house
+    function recalculateHouseLedger(houseId) {
+      const records = db.collections
+        .filter(c => c.houseId === houseId)
+        .sort((a, b) => a.month.localeCompare(b.month));
+
+      let runningDue = 0;
+      records.forEach(rec => {
+        rec.openingBalance = runningDue;
+        const bill = Number(rec.billAmount) || (db.settings.defaultMonthlyBill || 250);
+        rec.totalPayable = runningDue + bill;
+        const paid = Number(rec.paidAmount) || 0;
+        rec.remainingAmount = Math.max(0, rec.totalPayable - paid);
+
+        if (rec.remainingAmount === 0 && rec.totalPayable > 0) {
+          rec.status = "PAID";
+        } else if (paid > 0) {
+          rec.status = "PARTIAL";
+        } else {
+          rec.status = "UNPAID";
+        }
+
+        runningDue = rec.remainingAmount;
+      });
+    }
+
+    // Section & Room Helpers
+    function getHouseSection(roomNo) {
+      if (!roomNo) return "A";
+      const clean = String(roomNo).trim();
+      const firstChar = clean.charAt(0).toUpperCase();
+      if (SECTIONS.includes(firstChar)) {
+        return firstChar;
+      }
+      return "OTHER";
+    }
+
+    function getNextRoomNoForSection(sec) {
+      const targetSec = (sec && (SECTIONS.includes(sec) || sec === "OTHER")) ? sec : "A";
+      const secHouses = db.houses.filter(h => (h.section || getHouseSection(h.roomNo)) === targetSec);
+      if (secHouses.length === 0) {
+        return `${targetSec}1`;
+      }
+      let maxNum = 0;
+      secHouses.forEach(h => {
+        const m = h.roomNo.match(/\d+/);
+        if (m) {
+          const num = parseInt(m[0], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      });
+      return `${targetSec}${maxNum + 1}`;
+    }
+
+    // Natural Sorting: Orders by Section (A -> I), then room number numerically (A1, A2, ... A10, B1, B2)
+    function naturalSortHouses(houses) {
+      return [...houses].sort((a, b) => {
+        const secA = a.section || getHouseSection(a.roomNo);
+        const secB = b.section || getHouseSection(b.roomNo);
+        if (secA !== secB) {
+          const idxA = SECTIONS.indexOf(secA);
+          const idxB = SECTIONS.indexOf(secB);
+          if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+          if (idxA !== -1) return -1;
+          if (idxB !== -1) return 1;
+          return secA.localeCompare(secB);
+        }
+        // Same section: extract numerical digits
+        const numA = parseInt((a.roomNo.match(/\d+/) || [0])[0], 10);
+        const numB = parseInt((b.roomNo.match(/\d+/) || [0])[0], 10);
+        if (!isNaN(numA) && !isNaN(numB) && numA !== numB) {
+          return numA - numB;
+        }
+        return a.roomNo.localeCompare(b.roomNo, undefined, { numeric: true, sensitivity: "base" });
+      });
+    }
+
+    // Section Tab Selection & Pill Counters
+    function selectSection(sec) {
+      currentSection = sec;
+      updateSectionTabsUi();
+      renderHouses();
+      updateStats();
+    }
+
+    function updateSectionTabsUi() {
+      document.querySelectorAll(".section-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-section") === currentSection);
+      });
+      const summary = document.getElementById("activeSectionSummary");
+      if (summary) {
+        if (currentSection === "ALL") {
+          summary.textContent = "Showing All Sections (A to I)";
+        } else {
+          summary.textContent = `Showing Section ${currentSection} Only`;
+        }
+      }
+    }
+
+    function updateSectionCounts() {
+      const activeHouses = db.houses.filter(h => h.active);
+      const totalBadge = document.getElementById("secBadge_ALL");
+      if (totalBadge) totalBadge.textContent = activeHouses.length;
+
+      SECTIONS.forEach(sec => {
+        const count = activeHouses.filter(h => (h.section || getHouseSection(h.roomNo)) === sec).length;
+        const badge = document.getElementById(`secBadge_${sec}`);
+        if (badge) badge.textContent = count;
+      });
+    }
+
+    // Helper: Build a single House Card DOM Element
+    function createHouseCardElement(h, curr) {
+      const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+      const record = getCollectionRecord(h.id, currentMonth);
+      const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+      const totalPayable = prevDues + bill;
+      const paid = record ? Number(record.paidAmount) : 0;
+      const remaining = record ? Number(record.remainingAmount) : totalPayable;
+      const date = record && record.paidDate ? record.paidDate : "—";
+      const mode = record && record.paymentMode ? record.paymentMode : "—";
+
+      let badgeClass = "badge-unpaid";
+      let statusLabel = "UNPAID";
+      if (remaining === 0 && totalPayable > 0) {
+        badgeClass = "badge-paid";
+        statusLabel = "ALL CLEARED";
+      } else if (paid > 0 && remaining > 0) {
+        badgeClass = "badge-partial";
+        statusLabel = "PARTIAL";
+      }
+
+      const card = document.createElement("div");
+      card.className = "house-card";
+      card.innerHTML = `
+        <div>
+          <div class="house-header">
+            <div style="display:flex; align-items:center;">
+              <span class="room-badge">${escapeHtml(h.roomNo)}</span>
+              <div class="resident-info">
+                <div class="resident-name">${escapeHtml(h.residentName)}</div>
+                <div class="resident-phone">${h.phone ? "📞 " + escapeHtml(h.phone) : "No phone added"}</div>
+              </div>
+            </div>
+            <span class="status-badge ${badgeClass}">${statusLabel}</span>
+          </div>
+
+          ${prevDues > 0 ? `
+            <div class="previous-dues-alert">
+              ⚠️ Past Dues: ${curr}${prevDues} + Month Bill: ${curr}${bill} = <b>Total Payable: ${curr}${totalPayable}</b>
+            </div>
+          ` : ""}
+
+          <div class="bill-details">
+            <div>
+              <div class="bill-stat-title">Total Due</div>
+              <div class="bill-stat-val val-bill">${curr}${totalPayable}</div>
+            </div>
+            <div>
+              <div class="bill-stat-title">Paid</div>
+              <div class="bill-stat-val val-paid">${curr}${paid}</div>
+            </div>
+            <div>
+              <div class="bill-stat-title">Balance</div>
+              <div class="bill-stat-val val-due" style="color:${remaining > 0 ? 'var(--danger)' : 'var(--success)'};">${curr}${remaining}</div>
+            </div>
+          </div>
+
+          <div class="payment-meta">
+            <span>Date: <b>${date}</b></span>
+            <span>Mode: <b>${mode}</b></span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="openPaymentModal('${h.id}')">
+            💰 Update / Pay
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="openHistoryModal('${h.id}')" title="View Full Payment Ledger">
+            📜 History
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="openEditHouseModal('${h.id}')" title="Edit House Details">
+            ✏️
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="deleteHouse('${h.id}')" title="Delete Room" style="color:var(--danger);">
+            🗑️
+          </button>
+        </div>
+      `;
+      return card;
+    }
+
+    // Render Houses (Section-Wise Grouped View & Table)
+    function renderHouses() {
+      const container = document.getElementById("sectionsContainer");
+      const tbody = document.getElementById("tableBody");
+      const search = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+      const curr = db.settings.currency || "₹";
+
+      container.innerHTML = "";
+      tbody.innerHTML = "";
+
+      updateSectionCounts();
+
+      let visibleCount = 0;
+      let countAll = 0;
+      let countPaid = 0;
+      let countPartial = 0;
+      let countUnpaid = 0;
+
+      // Natural sort all active houses
+      const sortedHouses = naturalSortHouses(db.houses.filter(h => h.active));
+
+      // Calculate counts for overall filter tabs
+      sortedHouses.forEach(h => {
+        countAll++;
+        const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+        const record = getCollectionRecord(h.id, currentMonth);
+        const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+        const totalPayable = prevDues + bill;
+        const paid = record ? Number(record.paidAmount) : 0;
+        const remaining = record ? Number(record.remainingAmount) : totalPayable;
+        if (remaining === 0 && totalPayable > 0) countPaid++;
+        else if (paid > 0 && remaining > 0) countPartial++;
+        else countUnpaid++;
+      });
+
+      document.getElementById("badgeAll").textContent = countAll;
+      document.getElementById("badgePaid").textContent = countPaid;
+      document.getElementById("badgePartial").textContent = countPartial;
+      document.getElementById("badgeUnpaid").textContent = countUnpaid;
+
+      // Determine which sections to render: either [currentSection] or all SECTIONS
+      const sectionsToRender = (currentSection === "ALL") ? [...SECTIONS] : [currentSection];
+
+      // Track any houses that belong to "OTHER" section if user added custom letters
+      const otherHouses = sortedHouses.filter(h => !SECTIONS.includes(h.section || getHouseSection(h.roomNo)));
+      if (otherHouses.length > 0 && currentSection === "ALL") {
+        sectionsToRender.push("OTHER");
+      }
+
+      sectionsToRender.forEach(sec => {
+        const secHouses = sortedHouses.filter(h => (h.section || getHouseSection(h.roomNo)) === sec);
+
+        // Filter houses inside this section by search & payment status
+        const matchingHouses = secHouses.filter(h => {
+          const matchSearch = h.roomNo.toLowerCase().includes(search) || h.residentName.toLowerCase().includes(search);
+          if (!matchSearch) return false;
+
+          const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+          const record = getCollectionRecord(h.id, currentMonth);
+          const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+          const totalPayable = prevDues + bill;
+          const paid = record ? Number(record.paidAmount) : 0;
+          const remaining = record ? Number(record.remainingAmount) : totalPayable;
+          let status = "UNPAID";
+          if (remaining === 0 && totalPayable > 0) status = "PAID";
+          else if (paid > 0 && remaining > 0) status = "PARTIAL";
+
+          return (currentFilter === "ALL") || (currentFilter === status);
+        });
+
+        // If user is searching and this section has no matching houses, skip showing this section
+        if (search !== "" && matchingHouses.length === 0) {
+          return;
+        }
+
+        // Calculate section statistics
+        let secCollected = 0;
+        let secRemaining = 0;
+        secHouses.forEach(h => {
+          const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+          const record = getCollectionRecord(h.id, currentMonth);
+          const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+          const totalPayable = prevDues + bill;
+          const paid = record ? Number(record.paidAmount) : 0;
+          const remaining = record ? Number(record.remainingAmount) : totalPayable;
+          secCollected += paid;
+          secRemaining += remaining;
+        });
+
+        // Build Section Block
+        const secBlock = document.createElement("div");
+        secBlock.className = "section-block";
+
+        const secName = (sec === "OTHER") ? "Other Rooms" : `Section ${sec}`;
+        const secBadgeText = (sec === "OTHER") ? "✦" : sec;
+
+        secBlock.innerHTML = `
+          <div class="section-block-header">
+            <div class="section-block-title">
+              <span class="section-badge-large">${secBadgeText}</span>
+              <div>
+                <div class="section-name-text">${secName}</div>
+                <div class="section-meta-text">${secHouses.length} House${secHouses.length === 1 ? '' : 's'} registered in this section</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <div class="section-stats-pills">
+                <span class="section-stat-pill section-stat-collected">Collected: ${curr}${secCollected}</span>
+                <span class="section-stat-pill section-stat-due">Pending: ${curr}${secRemaining}</span>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddHouseModal('${sec}')" title="Add room to ${secName}">
+                + Add Room in ${secName}
+              </button>
+            </div>
+          </div>
+        `;
+
+        if (secHouses.length === 0) {
+          // Empty section placeholder card
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "section-empty-card";
+          emptyCard.innerHTML = `
+            <div style="font-size:2rem; margin-bottom:0.4rem;">🚪</div>
+            <div style="font-weight:700; color:#334155; font-size:1.05rem; margin-bottom:0.3rem;">No rooms added in ${secName} yet</div>
+            <p style="font-size:0.85rem; margin-bottom:0.95rem; color:#64748b;">
+              When collecting from ${secName}, add rooms such as ${sec}1, ${sec}2, ${sec}3...
+            </p>
+            <button class="btn btn-primary btn-sm" onclick="openAddHouseModal('${sec}')">
+              + Add First Room to ${secName} (${sec}1)
+            </button>
+          `;
+          secBlock.appendChild(emptyCard);
+        } else {
+          // Grid with room cards for this section
+          const innerGrid = document.createElement("div");
+          innerGrid.className = "houses-grid";
+
+          matchingHouses.forEach(h => {
+            visibleCount++;
+            const card = createHouseCardElement(h, curr);
+            innerGrid.appendChild(card);
+
+            // Also render in table view
+            const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+            const record = getCollectionRecord(h.id, currentMonth);
+            const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+            const totalPayable = prevDues + bill;
+            const paid = record ? Number(record.paidAmount) : 0;
+            const remaining = record ? Number(record.remainingAmount) : totalPayable;
+            const date = record && record.paidDate ? record.paidDate : "—";
+            const mode = record && record.paymentMode ? record.paymentMode : "—";
+            let badgeClass = "badge-unpaid";
+            let statusLabel = "UNPAID";
+            if (remaining === 0 && totalPayable > 0) {
+              badgeClass = "badge-paid";
+              statusLabel = "ALL CLEARED";
+            } else if (paid > 0 && remaining > 0) {
+              badgeClass = "badge-partial";
+              statusLabel = "PARTIAL";
+            }
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><span class="room-badge" style="background:#e0f2fe; color:#0369a1; font-weight:800;">Sec ${sec}</span></td>
+              <td><b>${escapeHtml(h.roomNo)}</b></td>
+              <td>${escapeHtml(h.residentName)}</td>
+              <td style="color:${prevDues > 0 ? 'var(--danger)' : 'var(--text-muted)'}">${curr}${prevDues}</td>
+              <td>${curr}${bill}</td>
+              <td><b>${curr}${totalPayable}</b></td>
+              <td><b style="color:var(--success)">${curr}${paid}</b></td>
+              <td><b style="color:${remaining > 0 ? 'var(--danger)' : 'var(--success)'}">${curr}${remaining}</b></td>
+              <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+              <td>${date}</td>
+              <td>${mode}</td>
+              <td class="no-print">
+                <button class="btn btn-primary btn-sm" onclick="openPaymentModal('${h.id}')">Update</button>
+                <button class="btn btn-outline btn-sm" onclick="openHistoryModal('${h.id}')">History</button>
+                <button class="btn btn-outline btn-sm" onclick="deleteHouse('${h.id}')" style="color:var(--danger);">🗑️</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // Add "+ Add Next Room" card at end of section grid (when not searching/filtering)
+          if (search === "" && currentFilter === "ALL") {
+            const addCard = document.createElement("div");
+            addCard.className = "add-house-card";
+            addCard.onclick = () => openAddHouseModal(sec);
+            const nextRoomSuggested = getNextRoomNoForSection(sec);
+            addCard.innerHTML = `
+              <div class="plus-circle">+</div>
+              <h4>+ Add Room to ${secName}</h4>
+              <p>Next suggested: <b>${nextRoomSuggested}</b></p>
+            `;
+            innerGrid.appendChild(addCard);
+          }
+
+          secBlock.appendChild(innerGrid);
+        }
+
+        container.appendChild(secBlock);
+      });
+
+      // Empty state handler
+      document.getElementById("emptyState").style.display = (visibleCount === 0 && search !== "") ? "block" : "none";
+    }
+
+    // Update Overall Stats
+    function updateStats() {
+      const curr = db.settings.currency || "₹";
+      let totalCollected = 0;
+      let totalRemaining = 0;
+      let totalExpected = 0;
+      let paidHousesCount = 0;
+
+      // Stats reflect either the currently focused section, or all sections
+      const activeHouses = db.houses.filter(h => {
+        if (!h.active) return false;
+        if (currentSection !== "ALL") {
+          return (h.section || getHouseSection(h.roomNo)) === currentSection;
+        }
+        return true;
+      });
+      const totalHouses = activeHouses.length;
+
+      activeHouses.forEach(h => {
+        const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+        const record = getCollectionRecord(h.id, currentMonth);
+        const bill = record ? Number(record.billAmount) : (db.settings.defaultMonthlyBill || 250);
+        const totalPayable = prevDues + bill;
+        const paid = record ? Number(record.paidAmount) : 0;
+        const remaining = record ? Number(record.remainingAmount) : totalPayable;
+
+        totalExpected += totalPayable;
+        totalCollected += paid;
+        totalRemaining += remaining;
+
+        if (remaining === 0 && totalPayable > 0) {
+          paidHousesCount++;
+        }
+      });
+
+      document.getElementById("statTotalCollected").textContent = curr + totalCollected.toLocaleString();
+      document.getElementById("statTotalRemaining").textContent = curr + totalRemaining.toLocaleString();
+      document.getElementById("statTotalExpected").textContent = curr + totalExpected.toLocaleString();
+      const scopeLabel = (currentSection === "ALL") ? "All Sections" : `Section ${currentSection}`;
+      document.getElementById("statCollectedSubtext").textContent = `${scopeLabel} • ${formatMonthTitle(currentMonth)}`;
+      document.getElementById("statProgressRatio").textContent = `${paidHousesCount} / ${totalHouses}`;
+
+      const pct = totalHouses > 0 ? Math.round((paidHousesCount / totalHouses) * 100) : 0;
+      document.getElementById("statProgressPercent").textContent = `${pct}% houses collected`;
+      document.getElementById("progressBarLabel").textContent = `${pct}% (${paidHousesCount} of ${totalHouses} houses paid in ${scopeLabel})`;
+      document.getElementById("progressBarFill").style.width = `${pct}%`;
+    }
+
+    // Filter and Search
+    function filterHouses() {
+      renderHouses();
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-filter") === filter);
+      });
+      renderHouses();
+    }
+
+    function toggleViewMode() {
+      isTableView = !isTableView;
+      document.getElementById("sectionsContainer").style.display = isTableView ? "none" : "block";
+      document.getElementById("tableContainer").style.display = isTableView ? "block" : "none";
+      document.getElementById("viewToggleBtn").textContent = isTableView ? "🎴 Switch to Section Cards View" : "📋 Switch to Table View";
+    }
+
+    // Payment Modal Functions & Running Balance Tracking
+    let currentModalPastDue = 0;
+
+    function openPaymentModal(houseId, targetMonth) {
+      const house = db.houses.find(h => h.id === houseId);
+      if (!house) return;
+      editingPaymentHouse = house;
+      modalSelectedMonth = targetMonth || currentMonth;
+
+      populateMonthSelect("pmMonthSelector", modalSelectedMonth);
+      loadModalMonthData(house.id, modalSelectedMonth);
+      openModal("paymentModal");
+    }
+
+    function loadModalMonthData(houseId, monthKey) {
+      const house = db.houses.find(h => h.id === houseId);
+      if (!house) return;
+
+      modalSelectedMonth = monthKey;
+      document.getElementById("pmMonthSelector").value = monthKey;
+      document.getElementById("pmHouseTitle").textContent = `Room ${house.roomNo} - ${house.residentName}`;
+      document.getElementById("pmMonthSubtitle").textContent = `Billing Month: ${formatMonthTitle(monthKey)}`;
+
+      // Calculate exact previous unpaid dues carried over to this month
+      currentModalPastDue = getPreviousOutstandingDues(houseId, monthKey);
+      const curr = db.settings.currency || "₹";
+
+      const prevDuesEl = document.getElementById("pmPrevDuesText");
+      if (prevDuesEl) {
+        prevDuesEl.textContent = curr + currentModalPastDue;
+        prevDuesEl.style.color = currentModalPastDue > 0 ? "var(--danger)" : "var(--text-muted)";
+      }
+
+      const record = getCollectionRecord(houseId, monthKey);
+      const defaultBill = db.settings.defaultMonthlyBill || 250;
+      const bill = record ? Number(record.billAmount) : defaultBill;
+      const totalPayable = currentModalPastDue + bill;
+
+      document.getElementById("pmBillAmount").value = bill;
+      document.getElementById("pmMonthBillText").textContent = curr + bill;
+      document.getElementById("pmTotalPayableVal").textContent = curr + totalPayable;
+
+      const activeStatus = document.getElementById("pmActiveMonthStatus");
+
+      if (record) {
+        document.getElementById("pmPaidAmount").value = record.paidAmount;
+        document.getElementById("pmDate").value = record.paidDate || getTodayIso();
+        document.getElementById("pmMode").value = record.paymentMode || "Cash";
+        document.getElementById("pmNotes").value = record.notes || "";
+        if (activeStatus) {
+          if (record.remainingAmount === 0 && totalPayable > 0) {
+            activeStatus.className = "status-badge badge-paid";
+            activeStatus.textContent = "ALL CLEARED";
+          } else if (record.paidAmount > 0) {
+            activeStatus.className = "status-badge badge-partial";
+            activeStatus.textContent = "PARTIAL";
+          } else {
+            activeStatus.className = "status-badge badge-unpaid";
+            activeStatus.textContent = "UNPAID";
+          }
+        }
+      } else {
+        // If no payment recorded yet, default to full totalPayable for convenience
+        document.getElementById("pmPaidAmount").value = totalPayable;
+        document.getElementById("pmDate").value = getTodayIso();
+        document.getElementById("pmMode").value = "Cash";
+        document.getElementById("pmNotes").value = "";
+        if (activeStatus) {
+          activeStatus.className = "status-badge badge-unpaid";
+          activeStatus.textContent = "NEW / NOT RECORDED";
+        }
+      }
+
+      calculateBalance();
+    }
+
+    function onModalMonthSelect(val) {
+      if (editingPaymentHouse) {
+        loadModalMonthData(editingPaymentHouse.id, val);
+      }
+    }
+
+    function stepModalMonth(delta) {
+      if (!modalSelectedMonth) modalSelectedMonth = currentMonth;
+      const [yearStr, monthStr] = modalSelectedMonth.split("-");
+      let year = parseInt(yearStr);
+      let month = parseInt(monthStr) + delta;
+
+      if (month < 1) {
+        month = 12;
+        year--;
+      } else if (month > 12) {
+        month = 1;
+        year++;
+      }
+
+      const newKey = `${year}-${String(month).padStart(2, "0")}`;
+      if (editingPaymentHouse) {
+        loadModalMonthData(editingPaymentHouse.id, newKey);
+      }
+    }
+
+    function calculateBalance() {
+      const pastDue = currentModalPastDue || 0;
+      const bill = parseFloat(document.getElementById("pmBillAmount").value) || 0;
+      const totalPayable = pastDue + bill;
+      const paid = parseFloat(document.getElementById("pmPaidAmount").value) || 0;
+      const remaining = Math.max(0, totalPayable - paid);
+      const curr = db.settings.currency || "₹";
+
+      document.getElementById("pmMonthBillText").textContent = curr + bill;
+      document.getElementById("pmTotalPayableVal").textContent = curr + totalPayable;
+      document.getElementById("pmRemainingVal").textContent = curr + remaining;
+
+      // Update quick action buttons
+      const btnTotal = document.getElementById("btnPayFullTotal");
+      if (btnTotal) btnTotal.textContent = `Pay Full (${curr}${totalPayable})`;
+      const btnBill = document.getElementById("btnPayBillOnly");
+      if (btnBill) {
+        btnBill.textContent = `Pay Bill Only (${curr}${bill})`;
+        btnBill.style.display = (pastDue > 0) ? "inline-block" : "none";
+      }
+
+      const statusBadge = document.getElementById("pmStatusBadge");
+      const calcBox = document.getElementById("pmCalcBox");
+      const subtext = document.getElementById("pmBalanceBreakdownSubtext");
+
+      if (remaining === 0 && totalPayable > 0) {
+        statusBadge.className = "status-badge badge-paid";
+        statusBadge.textContent = "ALL DUES CLEARED";
+        calcBox.className = "calc-summary-box";
+        if (subtext) {
+          subtext.textContent = (pastDue > 0) ? `Past balance (${curr}${pastDue}) + Month bill paid in full!` : "Full amount paid! No balance remaining.";
+          subtext.style.color = "var(--success)";
+        }
+      } else if (paid > 0 && remaining > 0) {
+        statusBadge.className = "status-badge badge-partial";
+        statusBadge.textContent = `PARTIAL DUE (${curr}${remaining})`;
+        calcBox.className = "calc-summary-box calc-due-box";
+        if (subtext) {
+          subtext.textContent = `Balance of ${curr}${remaining} remains and carries over to next month.`;
+          subtext.style.color = "#b45309";
+        }
+      } else if (paid === 0 && totalPayable > 0) {
+        statusBadge.className = "status-badge badge-unpaid";
+        statusBadge.textContent = `UNPAID (${curr}${totalPayable} DUE)`;
+        calcBox.className = "calc-summary-box calc-due-box";
+        if (subtext) {
+          subtext.textContent = `Full ${curr}${totalPayable} (Past dues ${curr}${pastDue} + Bill ${curr}${bill}) is pending.`;
+          subtext.style.color = "var(--danger)";
+        }
+      } else {
+        statusBadge.className = "status-badge badge-paid";
+        statusBadge.textContent = "CLEARED";
+        calcBox.className = "calc-summary-box";
+        if (subtext) subtext.textContent = "";
+      }
+    }
+
+    function setQuickPaid(type) {
+      const pastDue = currentModalPastDue || 0;
+      const bill = parseFloat(document.getElementById("pmBillAmount").value) || 0;
+      const totalPayable = pastDue + bill;
+
+      if (type === "TOTAL") {
+        document.getElementById("pmPaidAmount").value = totalPayable;
+      } else if (type === "BILL_ONLY") {
+        document.getElementById("pmPaidAmount").value = bill;
+      } else if (type === "ZERO") {
+        document.getElementById("pmPaidAmount").value = 0;
+      }
+      calculateBalance();
+    }
+
+    function savePayment(nextRoom = false) {
+      if (!editingPaymentHouse) return;
+
+      const monthToSave = modalSelectedMonth || currentMonth;
+      const pastDue = getPreviousOutstandingDues(editingPaymentHouse.id, monthToSave);
+      const bill = parseFloat(document.getElementById("pmBillAmount").value) || 0;
+      const totalPayable = pastDue + bill;
+      const paid = parseFloat(document.getElementById("pmPaidAmount").value) || 0;
+      const remaining = Math.max(0, totalPayable - paid);
+      const paidDate = document.getElementById("pmDate").value || getTodayIso();
+      const paymentMode = document.getElementById("pmMode").value;
+      const notes = document.getElementById("pmNotes").value.trim();
+
+      let status = "UNPAID";
+      if (remaining === 0 && totalPayable > 0) status = "PAID";
+      else if (paid > 0) status = "PARTIAL";
+
+      const recordId = `col_${editingPaymentHouse.id}_${monthToSave}`;
+      const existingIdx = db.collections.findIndex(c => c.houseId === editingPaymentHouse.id && c.month === monthToSave);
+
+      const recordObj = {
+        id: recordId,
+        houseId: editingPaymentHouse.id,
+        month: monthToSave,
+        openingBalance: pastDue,
+        billAmount: bill,
+        totalPayable: totalPayable,
+        paidAmount: paid,
+        remainingAmount: remaining,
+        paidDate: paidDate,
+        paymentMode: paymentMode,
+        status: status,
+        notes: notes
+      };
+
+      if (existingIdx >= 0) {
+        db.collections[existingIdx] = recordObj;
+      } else {
+        db.collections.push(recordObj);
+      }
+
+      // Cascade running balance updates to any existing future months
+      recalculateHouseLedger(editingPaymentHouse.id);
+
+      saveDatabase();
+      showToast(`Payment saved for Room ${editingPaymentHouse.roomNo} (${formatMonthTitle(monthToSave)})`);
+
+      // Update main page active month to match saved month for immediate visual confirmation
+      currentMonth = monthToSave;
+      document.getElementById("monthSelect").value = currentMonth;
+      renderAll();
+
+      if (nextRoom) {
+        // Move to the next active house in natural walk sequence (A1 -> A2 ... B1 -> B2 ... I1)
+        const activeHouses = naturalSortHouses(db.houses.filter(h => h.active));
+        const currentIdx = activeHouses.findIndex(h => h.id === editingPaymentHouse.id);
+        if (currentIdx >= 0 && currentIdx + 1 < activeHouses.length) {
+          openPaymentModal(activeHouses[currentIdx + 1].id, monthToSave);
+        } else {
+          closeModal("paymentModal");
+          showToast("Reached end of houses list!");
+        }
+      } else {
+        closeModal("paymentModal");
+      }
+    }
+
+    function copyReceiptText() {
+      if (!editingPaymentHouse) return;
+      const monthForReceipt = modalSelectedMonth || currentMonth;
+      const pastDue = currentModalPastDue || 0;
+      const bill = document.getElementById("pmBillAmount").value;
+      const totalPayable = Number(pastDue) + Number(bill);
+      const paid = document.getElementById("pmPaidAmount").value;
+      const remaining = Math.max(0, totalPayable - Number(paid));
+      const curr = db.settings.currency || "₹";
+
+      const receipt = `💧 *${db.settings.societyName || 'Water Bill'} Receipt*\n` +
+        `🏠 Room: ${editingPaymentHouse.roomNo} (${editingPaymentHouse.residentName})\n` +
+        `📅 Month: ${formatMonthTitle(monthForReceipt)}\n` +
+        (pastDue > 0 ? `⏳ Previous Balance: ${curr}${pastDue}\n` : '') +
+        `💧 Month Bill: ${curr}${bill}\n` +
+        `💵 Total Payable: ${curr}${totalPayable}\n` +
+        `✅ Amount Paid: ${curr}${paid}\n` +
+        `⚠️ Remaining Balance: ${curr}${remaining}\n` +
+        `🗓️ Date: ${document.getElementById("pmDate").value}\n` +
+        `Payment Mode: ${document.getElementById("pmMode").value}\n` +
+        (remaining === 0 ? `🎉 All dues cleared! Thank you!` : `Thank you!`);
+
+      navigator.clipboard.writeText(receipt).then(() => {
+        showToast("Receipt copied to clipboard! (Ready to paste on WhatsApp)");
+      }).catch(() => {
+        prompt("Copy receipt below:", receipt);
+      });
+    }
+
+    // House Ledger History Modal with Full Running Account
+    function openHistoryModal(houseId) {
+      const house = db.houses.find(h => h.id === houseId);
+      if (!house) return;
+
+      document.getElementById("histTitle").textContent = `Room ${house.roomNo} - ${house.residentName}`;
+      document.getElementById("histSubtitle").textContent = `Phone: ${house.phone || 'N/A'} • Complete Account Ledger`;
+
+      const tbody = document.getElementById("histTableBody");
+      tbody.innerHTML = "";
+      const curr = db.settings.currency || "₹";
+
+      // Sort all collection records for this house ascending by month to compute the running ledger
+      const records = db.collections
+        .filter(c => c.houseId === houseId)
+        .sort((a, b) => a.month.localeCompare(b.month));
+
+      if (records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:1.5rem;">No payment records recorded yet for this room.</td></tr>`;
+        document.getElementById("histTotalBilled").textContent = curr + "0";
+        document.getElementById("histTotalPaid").textContent = curr + "0";
+        document.getElementById("histTotalDue").textContent = curr + "0";
+      } else {
+        let totalBilled = 0;
+        let totalPaid = 0;
+        let runningDue = 0;
+        let ledgerRows = [];
+
+        records.forEach(r => {
+          const pastDue = runningDue;
+          const bill = Number(r.billAmount) || 0;
+          const payable = pastDue + bill;
+          const paid = Number(r.paidAmount) || 0;
+          const remaining = Math.max(0, payable - paid);
+          runningDue = remaining;
+
+          totalBilled += bill;
+          totalPaid += paid;
+
+          let badgeClass = "badge-unpaid";
+          let badgeText = "UNPAID";
+          if (remaining === 0 && payable > 0) {
+            badgeClass = "badge-paid";
+            badgeText = "ALL CLEARED";
+          } else if (paid > 0) {
+            badgeClass = "badge-partial";
+            badgeText = "PARTIAL";
+          }
+
+          ledgerRows.push(`
+            <tr>
+              <td><b>${formatMonthTitle(r.month)}</b></td>
+              <td style="color:${pastDue > 0 ? 'var(--danger)' : 'var(--text-muted)'}; font-weight:600;">${curr}${pastDue}</td>
+              <td>${curr}${bill}</td>
+              <td><b>${curr}${payable}</b></td>
+              <td style="color:var(--success); font-weight:700;">${curr}${paid}</td>
+              <td style="color:${remaining > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:800;">${curr}${remaining}</td>
+              <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+            </tr>
+          `);
+        });
+
+        // Show descending (latest month first) in the UI table
+        tbody.innerHTML = ledgerRows.reverse().join("");
+
+        document.getElementById("histTotalBilled").textContent = curr + totalBilled;
+        document.getElementById("histTotalPaid").textContent = curr + totalPaid;
+        document.getElementById("histTotalDue").textContent = curr + runningDue;
+      }
+
+      openModal("historyModal");
+    }
+
+    // Add / Edit House Modal
+    function openAddHouseModal(defaultSec) {
+      let targetSec = "A";
+      if (defaultSec && (SECTIONS.includes(defaultSec) || defaultSec === "OTHER")) {
+        targetSec = defaultSec;
+      } else if (currentSection !== "ALL" && SECTIONS.includes(currentSection)) {
+        targetSec = currentSection;
+      }
+
+      const secSelect = document.getElementById("hmSection");
+      if (secSelect) secSelect.value = targetSec;
+
+      const suggestedRoom = getNextRoomNoForSection(targetSec);
+      const secTitle = (targetSec === "OTHER") ? "Other" : `Section ${targetSec}`;
+      document.getElementById("houseModalTitle").textContent = `+ Add Room (${secTitle})`;
+      document.getElementById("houseModalSubtitle").textContent = `Enter Room Number and Resident Name for ${secTitle}`;
+      document.getElementById("hmEditId").value = "";
+      document.getElementById("hmRoomNo").value = suggestedRoom;
+      document.getElementById("hmResidentName").value = "";
+      document.getElementById("hmPhone").value = "";
+      document.getElementById("hmNotes").value = "";
+      document.getElementById("hmActive").value = "true";
+
+      // Show payment section & Save-And-Add button
+      document.getElementById("hmPaymentSection").style.display = "block";
+      document.getElementById("btnSaveAndAddAnother").style.display = "inline-flex";
+      document.getElementById("btnDeleteHouse").style.display = "none";
+
+      document.getElementById("hmMonthText").textContent = formatMonthTitle(currentMonth);
+      populateMonthSelect("hmPayMonth", currentMonth);
+      document.getElementById("hmRecordNow").checked = false;
+      document.getElementById("hmPaymentFields").style.display = "none";
+      document.getElementById("hmPayBill").value = db.settings.defaultMonthlyBill || 250;
+      document.getElementById("hmPayGiven").value = db.settings.defaultMonthlyBill || 250;
+      document.getElementById("hmPayRemaining").value = (db.settings.currency || "₹") + "0";
+
+      openModal("houseModal");
+      setTimeout(() => document.getElementById("hmResidentName").focus(), 150);
+    }
+
+    function onSectionSelectChange(newSec) {
+      const suggested = getNextRoomNoForSection(newSec);
+      document.getElementById("hmRoomNo").value = suggested;
+      const secTitle = (newSec === "OTHER") ? "Other" : `Section ${newSec}`;
+      document.getElementById("houseModalTitle").textContent = `+ Add Room (${secTitle})`;
+      document.getElementById("houseModalSubtitle").textContent = `Enter Room Number and Resident Name for ${secTitle}`;
+      document.getElementById("hmResidentName").focus();
+    }
+
+    function openEditHouseModal(houseId) {
+      const house = db.houses.find(h => h.id === houseId);
+      if (!house) return;
+      const sec = house.section || getHouseSection(house.roomNo);
+      document.getElementById("houseModalTitle").textContent = "Edit Room Details";
+      document.getElementById("houseModalSubtitle").textContent = `Editing Room ${house.roomNo} (Section ${sec})`;
+      document.getElementById("hmEditId").value = house.id;
+
+      const secSelect = document.getElementById("hmSection");
+      if (secSelect) secSelect.value = sec;
+
+      document.getElementById("hmRoomNo").value = house.roomNo;
+      document.getElementById("hmResidentName").value = house.residentName;
+      document.getElementById("hmPhone").value = house.phone || "";
+      document.getElementById("hmNotes").value = house.notes || "";
+      document.getElementById("hmActive").value = String(house.active);
+
+      // Hide initial payment & multi-add when editing an existing house
+      document.getElementById("hmPaymentSection").style.display = "none";
+      document.getElementById("btnSaveAndAddAnother").style.display = "none";
+      document.getElementById("btnDeleteHouse").style.display = "inline-flex";
+
+      openModal("houseModal");
+    }
+
+    function toggleAddHousePayment(checked) {
+      document.getElementById("hmPaymentFields").style.display = checked ? "block" : "none";
+      calculateAddHouseBalance();
+    }
+
+    function calculateAddHouseBalance() {
+      const bill = parseFloat(document.getElementById("hmPayBill").value) || 0;
+      const given = parseFloat(document.getElementById("hmPayGiven").value) || 0;
+      const rem = Math.max(0, bill - given);
+      document.getElementById("hmPayRemaining").value = (db.settings.currency || "₹") + rem;
+    }
+
+    function saveHouse(addAnother = false) {
+      const secSelect = document.getElementById("hmSection");
+      const section = secSelect ? secSelect.value : getHouseSection(document.getElementById("hmRoomNo").value);
+      const roomNo = document.getElementById("hmRoomNo").value.trim();
+      const residentName = document.getElementById("hmResidentName").value.trim();
+      const phone = document.getElementById("hmPhone").value.trim();
+      const notes = document.getElementById("hmNotes").value.trim();
+      const active = document.getElementById("hmActive").value === "true";
+      const editId = document.getElementById("hmEditId").value;
+
+      if (!roomNo || !residentName) {
+        alert("Please enter both Room Number and Resident Name.");
+        return;
+      }
+
+      if (editId) {
+        // Edit existing house
+        const idx = db.houses.findIndex(h => h.id === editId);
+        if (idx >= 0) {
+          db.houses[idx].section = section;
+          db.houses[idx].roomNo = roomNo;
+          db.houses[idx].residentName = residentName;
+          db.houses[idx].phone = phone;
+          db.houses[idx].notes = notes;
+          db.houses[idx].active = active;
+          showToast(`Updated Room ${roomNo} (${residentName})`);
+        }
+      } else {
+        // Create new house
+        const duplicate = db.houses.some(h => h.roomNo.toLowerCase() === roomNo.toLowerCase());
+        if (duplicate) {
+          alert(`Room ${roomNo} already exists! Please use a different room number.`);
+          return;
+        }
+
+        const newId = "h_" + Date.now();
+        const newHouse = {
+          id: newId,
+          section: section || getHouseSection(roomNo),
+          roomNo: roomNo,
+          residentName: residentName,
+          phone: phone,
+          notes: notes,
+          active: active,
+          createdAt: new Date().toISOString()
+        };
+        db.houses.push(newHouse);
+
+        // Optional initial payment if checked
+        const recordNow = document.getElementById("hmRecordNow").checked;
+        if (recordNow) {
+          const payMonth = document.getElementById("hmPayMonth") ? (document.getElementById("hmPayMonth").value || currentMonth) : currentMonth;
+          const bill = parseFloat(document.getElementById("hmPayBill").value) || 0;
+          const paid = parseFloat(document.getElementById("hmPayGiven").value) || 0;
+          const remaining = Math.max(0, bill - paid);
+          const mode = document.getElementById("hmPayMode").value;
+          let status = "UNPAID";
+          if (paid >= bill && bill > 0) status = "PAID";
+          else if (paid > 0 && paid < bill) status = "PARTIAL";
+
+          db.collections.push({
+            id: `col_${newId}_${payMonth}`,
+            houseId: newId,
+            month: payMonth,
+            openingBalance: 0,
+            billAmount: bill,
+            totalPayable: bill,
+            paidAmount: paid,
+            remainingAmount: remaining,
+            paidDate: getTodayIso(),
+            paymentMode: mode,
+            status: status,
+            notes: "Collected upon registration"
+          });
+        }
+
+        showToast(`Room ${roomNo} (${residentName}) added to Section ${section}!`);
+      }
+
+      saveDatabase();
+      renderAll();
+
+      if (addAnother && !editId) {
+        // Reset form fields to quickly add the next room in this same section!
+        document.getElementById("hmResidentName").value = "";
+        document.getElementById("hmPhone").value = "";
+        document.getElementById("hmNotes").value = "";
+        document.getElementById("hmRecordNow").checked = false;
+        document.getElementById("hmPaymentFields").style.display = "none";
+
+        // Auto-increment to next room in this section
+        const nextRoom = getNextRoomNoForSection(section);
+        document.getElementById("hmRoomNo").value = nextRoom;
+        document.getElementById("hmResidentName").focus();
+      } else {
+        closeModal("houseModal");
+      }
+    }
+
+    function deleteHouse(houseId) {
+      const house = db.houses.find(h => h.id === houseId);
+      if (!house) return;
+      if (confirm(`Are you sure you want to delete Room ${house.roomNo} (${house.residentName})? All payment records for this room will also be removed.`)) {
+        db.houses = db.houses.filter(h => h.id !== houseId);
+        db.collections = db.collections.filter(c => c.houseId !== houseId);
+        saveDatabase();
+        renderAll();
+        showToast(`Room ${house.roomNo} deleted`);
+      }
+    }
+
+    function deleteCurrentEditHouse() {
+      const editId = document.getElementById("hmEditId").value;
+      if (editId) {
+        deleteHouse(editId);
+        closeModal("houseModal");
+      }
+    }
+
+    // Rollout Next Month Prompt
+    function rolloutNextMonthPrompt() {
+      const [year, month] = currentMonth.split("-");
+      let nextY = parseInt(year);
+      let nextM = parseInt(month) + 1;
+      if (nextM > 12) {
+        nextM = 1;
+        nextY++;
+      }
+      const nextMonthKey = `${nextY}-${String(nextM).padStart(2, "0")}`;
+      const nextMonthTitle = formatMonthTitle(nextMonthKey);
+
+      if (confirm(`Do you want to switch and start collection for ${nextMonthTitle}? All your houses will automatically be ready with default bill ₹${db.settings.defaultMonthlyBill || 250}.`)) {
+        currentMonth = nextMonthKey;
+        document.getElementById("monthSelect").value = currentMonth;
+        renderAll();
+        showToast(`Switched to ${nextMonthTitle}`);
+      }
+    }
+
+    // Settings Modal
+    function openSettingsModal() {
+      document.getElementById("cfgSocietyName").value = db.settings.societyName || "";
+      document.getElementById("cfgDefaultRate").value = db.settings.defaultMonthlyBill || 250;
+      document.getElementById("cfgCollectorName").value = db.settings.collectorName || "";
+      if (document.getElementById("cfgApiUrl")) {
+        document.getElementById("cfgApiUrl").value = db.settings.apiUrl || "";
+      }
+      renderSnapshotList();
+      openModal("settingsModal");
+    }
+
+    function saveSettings() {
+      const society = document.getElementById("cfgSocietyName").value.trim() || "AquaPay";
+      const rate = Number(document.getElementById("cfgDefaultRate").value) || 250;
+      const collector = document.getElementById("cfgCollectorName").value.trim() || "Manager";
+      const apiUrl = document.getElementById("cfgApiUrl") ? document.getElementById("cfgApiUrl").value.trim() : "";
+
+      db.settings.societyName = society;
+      db.settings.systemTitle = society;
+      db.settings.defaultMonthlyBill = rate;
+      db.settings.collectorName = collector;
+      db.settings.apiUrl = apiUrl;
+
+      saveDatabase();
+      closeModal("settingsModal");
+      renderAll();
+      showToast("⚙️ Settings saved successfully!");
+    }
+
+    function renderSnapshotList() {
+      const listEl = document.getElementById("snapshotList");
+      if (!listEl) return;
+      try {
+        const raw = localStorage.getItem(SNAPSHOTS_KEY);
+        const snapshots = raw ? JSON.parse(raw) : [];
+        if (!snapshots || snapshots.length === 0) {
+          listEl.innerHTML = `<div style="color:var(--text-muted); padding:0.4rem 0;">No snapshots recorded yet. Auto-snapshots are saved continuously as you record payments.</div>`;
+          return;
+        }
+
+        listEl.innerHTML = snapshots.map((s, idx) => {
+          const date = new Date(s.timestamp);
+          const timeFormatted = date.toLocaleString();
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.45rem 0; border-bottom:1px dashed #e2e8f0; gap:0.5rem; flex-wrap:wrap;">
+              <div>
+                <b>Snapshot #${idx + 1}</b> • <span style="color:#0369a1; font-weight:600;">${timeFormatted}</span>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${s.housesCount} houses registered, ${s.collectionsCount} payment records</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" onclick="restoreSnapshot(${idx})" style="padding:0.25rem 0.55rem; font-size:0.75rem;">
+                Restore This
+              </button>
+            </div>
+          `;
+        }).join("");
+      } catch (e) {
+        listEl.innerHTML = `<span style="color:var(--text-muted);">Snapshots unavailable.</span>`;
+      }
+    }
+
+    function restoreSnapshot(idx) {
+      try {
+        const raw = localStorage.getItem(SNAPSHOTS_KEY);
+        const snapshots = raw ? JSON.parse(raw) : [];
+        if (snapshots[idx] && snapshots[idx].data) {
+          const date = new Date(snapshots[idx].timestamp).toLocaleString();
+          if (confirm(`Are you sure you want to restore Snapshot #${idx + 1} from ${date}?\nAll current records will be replaced with this snapshot.`)) {
+            db = snapshots[idx].data;
+            saveDatabase();
+            closeModal("settingsModal");
+            renderAll();
+            showToast(`Restored from Snapshot #${idx + 1}!`);
+          }
+        }
+      } catch (e) {
+        alert("Failed to restore snapshot.");
+      }
+    }
+
+    function clearAllData() {
+      const confirmCode = prompt(
+        "⚠️ CRITICAL ACTION: WIPE ALL DATA\n\n" +
+        "You are about to wipe all house and payment records to start 100% clean with ZERO dummy records.\n\n" +
+        "To confirm and start completely fresh, type CLEAR in capital letters below:"
+      );
+
+      if (confirmCode === "CLEAR") {
+        db = {
+          settings: {
+            systemTitle: "AquaPay",
+            societyName: "AquaPay",
+            collectorName: "Manager",
+            defaultMonthlyBill: 250,
+            currency: "₹"
+          },
+          houses: [],
+          collections: []
+        };
+        saveDatabase();
+        closeModal("settingsModal");
+        renderAll();
+        showToast("🧹 All records wiped! Starting completely fresh with 0 rooms.");
+      } else if (confirmCode !== null) {
+        alert("Action cancelled. Your data was not touched.");
+      }
+    }
+    const resetToTestAccount = clearAllData;
+
+    // Export CSV (Organized by Section & Room Number)
+    function exportCSV() {
+      const headers = ["Section", "Room No", "Resident Name", "Phone", "Month", "Past Dues", "Month Bill", "Total Payable", "Paid Amount", "Total Remaining Balance", "Status", "Date Paid", "Mode", "Notes"];
+      const rows = [headers];
+      const defaultBill = db.settings.defaultMonthlyBill || 250;
+
+      const activeHouses = naturalSortHouses(db.houses.filter(h => h.active));
+      activeHouses.forEach(h => {
+        const sec = h.section || getHouseSection(h.roomNo);
+        const prevDues = getPreviousOutstandingDues(h.id, currentMonth);
+        const record = getCollectionRecord(h.id, currentMonth);
+        const bill = record ? Number(record.billAmount) : defaultBill;
+        const totalPayable = prevDues + bill;
+        const paid = record ? Number(record.paidAmount) : 0;
+        const remaining = record ? Number(record.remainingAmount) : totalPayable;
+        const status = record ? record.status : "UNPAID";
+        const date = record && record.paidDate ? record.paidDate : "";
+        const mode = record && record.paymentMode ? record.paymentMode : "";
+        const notes = record && record.notes ? record.notes : "";
+
+        rows.push([
+          `"Section ${sec}"`,
+          `"${h.roomNo}"`,
+          `"${h.residentName}"`,
+          `"${h.phone || ''}"`,
+          `"${currentMonth}"`,
+          prevDues,
+          bill,
+          totalPayable,
+          paid,
+          remaining,
+          status,
+          date,
+          mode,
+          `"${notes}"`
+        ]);
+      });
+
+      const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Water_Collection_${currentMonth}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("CSV sheet exported successfully!");
+    }
+
+    // Download & Restore JSON
+    function downloadBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `water_collection_backup_${getTodayIso()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("💾 Permanent backup file saved! Your data is safe.");
+    }
+
+    function handleRestore(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && Array.isArray(parsed.houses)) {
+            db = parsed;
+            saveDatabase();
+            renderAll();
+            closeModal("settingsModal");
+            showToast("Database restored successfully from backup file!");
+          } else {
+            alert("Invalid database backup file format. Please upload a valid Water Collection JSON backup.");
+          }
+        } catch (err) {
+          alert("Error reading file: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Utilities
+    function openModal(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function getTodayIso() {
+      return new Date().toISOString().split("T")[0];
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      document.getElementById("toastMsg").textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Close modal on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document.querySelectorAll(".modal-overlay.open").forEach(m => m.classList.remove("open"));
+      }
+    });
+
+    // Unload protection if user accidentally navigates away while a modal is actively open
+    window.addEventListener("beforeunload", (e) => {
+      const activeModals = document.querySelectorAll(".modal-overlay.open");
+      if (activeModals.length > 0) {
+        e.preventDefault();
+        e.returnValue = "You have an open window with unsaved data. Are you sure you want to leave?";
+        return e.returnValue;
+      }
+    });
+  </script>
+</body>
+</html>
